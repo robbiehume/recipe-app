@@ -330,3 +330,4 @@ api/venv/
 api/venv/*
 my-ec2-keypair.pem
 stability_ai.py
+.DS_Store
