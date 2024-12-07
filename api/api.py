@@ -202,7 +202,6 @@ def save_recipe():
                 SET user_id = %s, title = %s, ingredients = %s, instructions = %s, image_path = %s, image_prompt = %s, servings = %s
                 WHERE title = %s and user_id = %s
             ''', (user_id, title, ingredients_json, instructions_json, image_path, image_prompt, servings, title, user_id))
-            #conn.commit()
 
             return jsonify({'message': 'Recipe updated'}), 200
 
@@ -269,8 +268,8 @@ def delete_recipe():
 
         if os.path.exists(image_path):
             os.remove(image_path)
-        #else:
-            #return jsonify({'message': 'Recipe image not found'}), 404
+        else:
+            return jsonify({'message': 'Recipe image not found'}), 404
 
         return jsonify({'message': 'Recipe deleted successfully'}), 200
 
