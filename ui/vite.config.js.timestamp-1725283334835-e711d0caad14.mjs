@@ -1,9 +1,9 @@
 // vite.config.js
 import { fileURLToPath, URL } from "node:url";
-import { defineConfig } from "file:///Users/robbiehume/Documents/recipe_app/vue-project/node_modules/vite/dist/node/index.js";
-import vue from "file:///Users/robbiehume/Documents/recipe_app/vue-project/node_modules/@vitejs/plugin-vue/dist/index.mjs";
-import vueDevTools from "file:///Users/robbiehume/Documents/recipe_app/vue-project/node_modules/vite-plugin-vue-devtools/dist/vite.mjs";
-var __vite_injected_original_import_meta_url = "file:///Users/robbiehume/Documents/recipe_app/vue-project/vite.config.js";
+import { defineConfig } from "file:///Users/robbiehume/Documents/recipe_app/ui/node_modules/vite/dist/node/index.js";
+import vue from "file:///Users/robbiehume/Documents/recipe_app/ui/node_modules/@vitejs/plugin-vue/dist/index.mjs";
+import vueDevTools from "file:///Users/robbiehume/Documents/recipe_app/ui/node_modules/vite-plugin-vue-devtools/dist/vite.mjs";
+var __vite_injected_original_import_meta_url = "file:///Users/robbiehume/Documents/recipe_app/ui/vite.config.js";
 var vite_config_default = defineConfig({
   plugins: [
     vue(),
