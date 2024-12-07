@@ -60,7 +60,7 @@ const handleGetSavedRecipe = (recipeId) => {
 
 async function getUserSavedRecipes() {
   try {
-    const response = await axios.get('http://webserverloadbalancer-248097766.us-east-2.elb.amazonaws.com/api/get_user_saved_recipes', {
+    const response = await axios.get(`${dataStore.backendServer}/get_user_saved_recipes`, {
       params: { user_id: dataStore.userId },
     });
     savedRecipes.value = response.data;

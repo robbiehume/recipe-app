@@ -150,7 +150,7 @@ async function getSavedImage(imageTitle){
       }
       else {
         imageResponse.value = 'error'
-        gettingImage = false
+        gettingImage.value = false
       }
     })
 }
