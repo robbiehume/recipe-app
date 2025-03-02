@@ -3,65 +3,67 @@
     class="app-container flex-column align-items-center"
     style="width: 90vw; max-width: 1000px"
   >
-    <div class="flex justify-content-between" style="width: 100%">
-      <SavedRecipesList
-        ref="savedRecipesListRef"
-        @get-saved-recipe="getSavedRecipe"
-        @show-error="showError"
-      />
-      <Login class="p-0 align-self-end" />
-    </div>
-
-    <div class="header flex-column gap-3" style="">
-      <RecipeForm ref="recipeFormRef" @get-recipe="getRecipe" />
-      <div class="flex justify-content-center gap-3">
-        <Button
-          id="generate-button"
-          :disabled="gettingRecipe"
-          @click="getRecipe()"
-          class="flex justify-content-center"
-          style="margin-left: 0; width: 161px"
-        >
-          <span v-if="gettingRecipe" class="px-3">Generating...</span>
-          <span
-            v-else-if="recipeFormRef?.emptyPromptAndIngredients"
-            class=""
-            style=""
-            >Random Recipe</span
-          >
-          <span v-else>Generate Recipe</span>
-        </Button>
-        <Button
-          raised
-          :disabled="displayedRecipe === ''"
-          id="save-button"
-          severity="secondary"
-          label=""
-          @click="saveRecipe()"
-        >
-          Save Recipe
-        </Button>
-        <!-- <Button raised icon="pi pi-thumbs-up-fill" severity="success" @click="likeRecipe()" /> -->
-        <!-- <Button raised icon="pi pi-thumbs-down-fill" severity="danger" @click="dislikeRecipe()" /> -->
-        <Button
-          raised
-          :disabled="displayedRecipe === ''"
-          severity="secondary"
-          label=""
-          @click="exportToPDF"
-        >
-          Export to PDF
-        </Button>
+    <div class="content-container" style="width: 100%; max-width: 800px">
+      <!-- Navigation Area -->
+      <div
+        class="app-navigation flex justify-content-between mb-3"
+        style="width: 100%"
+      >
+        <SavedRecipesList
+          ref="savedRecipesListRef"
+          @get-saved-recipe="getSavedRecipe"
+          @show-error="showError"
+        />
+        <Login class="p-0 align-self-end" />
       </div>
 
-      <RecipeDisplay
-        ref="recipeDisplayRef"
-        :displayedRecipe="displayedRecipe"
-        :imageSrc="imageSrc"
-        :imageResponse="imageResponse"
-        :gettingRecipe="gettingRecipe"
-        :gettingImage="gettingImage"
-      />
+      <!-- Main Content Area -->
+      <div class="app-content flex-column gap-2">
+        <RecipeForm ref="recipeFormRef" @get-recipe="getRecipe" />
+
+        <div class="flex justify-content-center gap-3 action-buttons my-2">
+          <Button
+            id="generate-button"
+            :disabled="gettingRecipe"
+            @click="getRecipe()"
+            class="p-button-primary"
+          >
+            <span v-if="gettingRecipe" class="px-3">Generating...</span>
+            <span v-else-if="recipeFormRef?.emptyPromptAndIngredients">
+              <i class="pi pi-refresh mr-2"></i>Random Recipe
+            </span>
+            <span v-else> <i class="pi pi-book mr-2"></i>Generate Recipe </span>
+          </Button>
+
+          <Button
+            :disabled="displayedRecipe === ''"
+            id="save-button"
+            severity="secondary"
+            @click="saveRecipe()"
+            class="p-button-outlined"
+          >
+            <i class="pi pi-save mr-2"></i>Save Recipe
+          </Button>
+
+          <Button
+            :disabled="displayedRecipe === ''"
+            severity="secondary"
+            @click="exportToPDF"
+            class="p-button-outlined"
+          >
+            <i class="pi pi-file-pdf mr-2"></i>Export to PDF
+          </Button>
+        </div>
+
+        <RecipeDisplay
+          ref="recipeDisplayRef"
+          :displayedRecipe="displayedRecipe"
+          :imageSrc="imageSrc"
+          :imageResponse="imageResponse"
+          :gettingRecipe="gettingRecipe"
+          :gettingImage="gettingImage"
+        />
+      </div>
     </div>
     <Toast style="width: fit-content" />
   </div>
@@ -298,11 +300,52 @@ const dislikeRecipe = () => {
 </script>
 
 <style>
+/* Add these to your existing styles */
+body {
+  background-color: #f8f9fa;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+}
+
 .app-container {
   display: flex;
   min-height: 100vh;
   background-color: #f8f9fa;
-  padding: 2rem 1rem;
+  padding: 1rem;
+}
+
+/* Improve focus states for accessibility */
+:focus-visible {
+  outline: 2px solid #4361ee;
+  outline-offset: 2px;
+}
+
+/* Smooth transitions for all interactive elements */
+a,
+button,
+.p-button,
+.p-inputtext,
+.p-chips,
+.p-inputswitch {
+  transition: all 0.2s ease;
+}
+
+/* Consistent card styling */
+.card {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 1.5rem;
+}
+
+/* Toast improvements */
+.p-toast {
+  opacity: 0.95;
+}
+
+.p-toast .p-toast-message {
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .header {
@@ -331,7 +374,6 @@ Button:hover:not(:disabled) {
   display: flex;
   justify-content: center;
   gap: 1rem;
-  margin: 1.5rem 0;
   flex-wrap: wrap;
 }
 
@@ -380,5 +422,33 @@ ol {
     width: 100%;
     max-width: 300px;
   }
+}
+
+/* Add to your existing styles */
+.content-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.app-navigation {
+  padding-top: 1rem;
+}
+
+.app-content {
+  display: flex;
+}
+
+/* Override PrimeVue InputSwitch colors globally */
+.p-inputswitch.p-inputswitch-checked .p-inputswitch-slider {
+  background-color: #4361ee !important;
+}
+
+.p-inputswitch.p-inputswitch-checked:not(.p-disabled):hover
+  .p-inputswitch-slider {
+  background-color: #3a56d4 !important;
+}
+
+.p-inputswitch.p-focus .p-inputswitch-slider {
+  box-shadow: 0 0 0 0.2rem rgba(67, 97, 238, 0.2) !important;
 }
 </style>
