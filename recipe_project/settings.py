@@ -1,0 +1,1 @@
+MEDIA_ROOT = '/home/ec2-user/recipe_app/images/' 
