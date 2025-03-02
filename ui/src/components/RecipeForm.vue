@@ -2,12 +2,14 @@
   <div class="recipe-form-container">
     <div class="form-header">
       <h1>Recipe Helper</h1>
-      <p class="form-subtitle">
-        Enter a prompt, ingredients, or both to generate a custom recipe
-      </p>
     </div>
 
     <div class="form-card">
+      <div class="form-instructions">
+        Enter a prompt, ingredients, or both to generate a custom recipe. Leave
+        both empty for a random recipe.
+      </div>
+
       <div class="prompt-section">
         <FloatLabel>
           <Textarea
@@ -19,13 +21,10 @@
             v-model="prompt"
             placeholder="Describe what you're looking for..."
           />
-          <label class="label-sm" for="prompt">
-            Prompt <span class="required-indicator">*</span>
-          </label>
+          <label class="label-sm pt-1" for="prompt"
+            >Prompt <span class="required-indicator">*</span></label
+          >
         </FloatLabel>
-        <small class="helper-text"
-          >Required for custom recipe (or use ingredients below)</small
-        >
       </div>
 
       <div class="ingredients-section">
@@ -38,12 +37,14 @@
             class="ingredients-input"
           />
           <label class="label-sm" for="ingredients">
-            Ingredients <span class="required-indicator">*</span>
+            Ingredients (press enter or a comma after each one)
+            <span class="required-indicator">*</span>
           </label>
         </FloatLabel>
-        <small class="helper-text"
-          >Required for custom recipe (or use prompt above)</small
-        >
+        <small class="helper-text">
+          <span class="required-indicator">*</span> At least one of these fields
+          is required for a custom recipe
+        </small>
       </div>
 
       <div class="options-section">
@@ -78,23 +79,19 @@
               @keydown.enter="getRecipe()"
               class="diet-input"
               v-model="diets"
-              placeholder="e.g., vegan"
+              :style="{ width: `${inputWidth}ch` }"
             />
           </div>
 
-          <div class="option-item">
+          <div class="option-item image-toggle">
             <label for="gen-image">Generate image:</label>
-            <InputSwitch id="gen-image" v-model="dataStore.generateImage" />
+            <InputSwitch
+              id="gen-image"
+              v-model="dataStore.generateImage"
+              class="blue-switch"
+            />
           </div>
         </div>
-      </div>
-
-      <div class="form-note">
-        <i class="pi pi-info-circle"></i>
-        <span
-          >Leave both prompt and ingredients empty to generate a random
-          recipe</span
-        >
       </div>
     </div>
   </div>
@@ -123,9 +120,11 @@ const servings = ref(4);
 const servingsRef = ref(null);
 const diets = ref("");
 
-const inputWidth = computed(() =>
-  Math.min(Math.max(diets.value.length + 1, 6), 12)
-);
+const inputWidth = computed(() => {
+  const placeholderLength = "Paleo, Veg., etc.".length;
+  const contentLength = diets.value.length;
+  return Math.max(contentLength + 2, placeholderLength + 2);
+});
 
 const fullPrompt = computed(() => {
   let _prompt = "";
@@ -230,6 +229,27 @@ const handleKeyDown = (event) => {
   margin-bottom: 1.5rem;
 }
 
+.form-instructions {
+  margin-bottom: 1.5rem;
+  color: #6c757d;
+  font-size: 0.9rem;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.required-indicator {
+  color: #4361ee;
+  font-weight: bold;
+}
+
+.helper-text {
+  display: block;
+  color: #6c757d;
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+
 .prompt-section {
   margin-bottom: 1.5rem;
 }
@@ -254,34 +274,39 @@ const handleKeyDown = (event) => {
   display: flex;
   justify-content: center;
   width: 100%;
+  overflow-x: auto;
 }
 
 .options-container {
   display: flex;
-  flex-wrap: wrap;
-  gap: 1.5rem;
-  justify-content: center;
+  flex-wrap: nowrap;
+  gap: 1rem;
+  justify-content: space-between;
   align-items: center;
-  max-width: 800px;
+  width: 100%;
 }
 
 .option-item {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.5rem;
   white-space: nowrap;
 }
 
 .diet-container {
-  width: 180px;
+  flex: 1;
+  min-width: 120px;
 }
 
 .diet-input {
-  flex: 1;
   min-width: 80px;
   border-radius: 8px;
   text-align: center;
   height: 30px;
+}
+
+.image-toggle {
+  min-width: auto;
 }
 
 .label-sm {
@@ -292,61 +317,28 @@ const handleKeyDown = (event) => {
   width: 25%;
 }
 
-@media (max-width: 992px) {
-  .options-container {
-    max-width: 700px;
-  }
-}
-
 @media (max-width: 768px) {
   .options-container {
-    flex-direction: column;
-    align-items: flex-start;
-    width: 100%;
+    padding-bottom: 0.5rem;
   }
 
   .option-item {
-    width: 100%;
-    justify-content: space-between;
-  }
-
-  .diet-container {
-    width: 100%;
+    flex-shrink: 0;
   }
 }
 
-.form-subtitle {
-  font-size: 0.95rem;
-  color: #6c757d;
-  margin: 0.5rem 0 0;
+/* Blue styling for the InputSwitch to match the Random Recipe button */
+:deep(.blue-switch) .p-inputswitch.p-inputswitch-checked .p-inputswitch-slider {
+  background-color: #4361ee !important;
 }
 
-.required-indicator {
-  color: #4361ee;
-  margin-left: 2px;
+:deep(.blue-switch)
+  .p-inputswitch.p-inputswitch-checked:not(.p-disabled):hover
+  .p-inputswitch-slider {
+  background-color: #3a56d4 !important;
 }
 
-.helper-text {
-  display: block;
-  color: #6c757d;
-  font-size: 0.8rem;
-  margin-top: 0.25rem;
-  margin-left: 0.25rem;
-}
-
-.form-note {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: 1rem;
-  padding: 0.75rem;
-  background-color: rgba(67, 97, 238, 0.08);
-  border-radius: 8px;
-  font-size: 0.9rem;
-  color: #4361ee;
-}
-
-.form-note i {
-  font-size: 1rem;
+:deep(.blue-switch) .p-inputswitch.p-focus .p-inputswitch-slider {
+  box-shadow: 0 0 0 0.2rem rgba(67, 97, 238, 0.2) !important;
 }
 </style>
