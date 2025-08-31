@@ -10,7 +10,7 @@ export const useDataStore = defineStore('dataStore', {
     username: '',
 
     generateImage: true,
-    backendServer: 'https://robbiehume.com/api'
+    backendServer: '/api'
   }),
   
   actions: {
